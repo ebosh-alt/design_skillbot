@@ -1,0 +1,154 @@
+DEBUG:asyncio:Using proactor: IocpProactor
+DEBUG:aiogram:Make request: "getMe" with data: "{}" and files "None"
+DEBUG:aiogram:Response for getMe: [200] "'{"ok":true,"result":{"id":5333826486,"is_bot":true,"first_name":"test_______bot","username":"test_for_flow_evg_bot","can_join_groups":true,"can_read_all_group_messages":false,"supports_inline_queries":false}}'"
+INFO:aiogram:Bot: test_______bot [@test_for_flow_evg_bot]
+INFO:aiogram.dispatcher.dispatcher:Start polling.
+DEBUG:aiogram:Make request: "getWebhookInfo" with data: "{}" and files "None"
+DEBUG:aiogram:Response for getWebhookInfo: [200] "'{"ok":true,"result":{"url":"","has_custom_certificate":false,"pending_update_count":0}}'"
+DEBUG:aiogram:Make request: "getUpdates" with data: "{'timeout': 20}" and files "None"
+DEBUG:aiogram:Response for getUpdates: [200] "'{"ok":true,"result":[]}'"
+DEBUG:aiogram:Make request: "getUpdates" with data: "{'timeout': 20}" and files "None"
+DEBUG:aiogram:Response for getUpdates: [200] "'{"ok":true,"result":[]}'"
+DEBUG:aiogram:Make request: "getUpdates" with data: "{'timeout': 20}" and files "None"
+INFO:aiogram.dispatcher.dispatcher:Stop polling...
+WARNING:aiogram:Goodbye!
+DEBUG:root:start work bot
+DEBUG:asyncio:Using proactor: IocpProactor
+DEBUG:aiogram:Make request: "getMe" with data: "{}" and files "None"
+DEBUG:aiogram:Response for getMe: [200] "'{"ok":true,"result":{"id":5333826486,"is_bot":true,"first_name":"test_______bot","username":"test_for_flow_evg_bot","can_join_groups":true,"can_read_all_group_messages":false,"supports_inline_queries":false}}'"
+INFO:aiogram:Bot: test_______bot [@test_for_flow_evg_bot]
+INFO:aiogram.dispatcher.dispatcher:Start polling.
+DEBUG:aiogram:Make request: "getWebhookInfo" with data: "{}" and files "None"
+DEBUG:aiogram:Response for getWebhookInfo: [200] "'{"ok":true,"result":{"url":"","has_custom_certificate":false,"pending_update_count":0}}'"
+DEBUG:aiogram:Make request: "getUpdates" with data: "{'timeout': 20}" and files "None"
+INFO:aiogram.dispatcher.dispatcher:Stop polling...
+WARNING:aiogram:Goodbye!
+DEBUG:root:start work bot
+DEBUG:asyncio:Using proactor: IocpProactor
+DEBUG:aiogram:Make request: "getMe" with data: "{}" and files "None"
+DEBUG:aiogram:Response for getMe: [200] "'{"ok":true,"result":{"id":5333826486,"is_bot":true,"first_name":"test_______bot","username":"test_for_flow_evg_bot","can_join_groups":true,"can_read_all_group_messages":false,"supports_inline_queries":false}}'"
+INFO:aiogram:Bot: test_______bot [@test_for_flow_evg_bot]
+INFO:aiogram.dispatcher.dispatcher:Start polling.
+DEBUG:aiogram:Make request: "getWebhookInfo" with data: "{}" and files "None"
+DEBUG:aiogram:Response for getWebhookInfo: [200] "'{"ok":true,"result":{"url":"","has_custom_certificate":false,"pending_update_count":0}}'"
+DEBUG:aiogram:Make request: "getUpdates" with data: "{'timeout': 20}" and files "None"
+INFO:aiogram.dispatcher.dispatcher:Stop polling...
+WARNING:aiogram:Goodbye!
+INFO:aiogram:Bot: test_______bot [@test_for_flow_evg_bot]
+INFO:aiogram.dispatcher.dispatcher:Start polling.
+INFO:aiogram.dispatcher.dispatcher:Stop polling...
+WARNING:aiogram:Goodbye!
+WARNING:aiogram:Goodbye!
+ERROR:aiogram.dispatcher.dispatcher:Cause exception while getting updates.
+Traceback (most recent call last):
+  File "D:\softs\Lib\site-packages\aiogram\dispatcher\dispatcher.py", line 381, in start_polling
+    updates = await self.bot.get_updates(
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\softs\Lib\site-packages\aiogram\bot\bot.py", line 110, in get_updates
+    result = await self.request(api.Methods.GET_UPDATES, payload)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\softs\Lib\site-packages\aiogram\bot\base.py", line 236, in request
+    return await api.make_request(await self.get_session(), self.server, self.__token, method, data, files,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\softs\Lib\site-packages\aiogram\bot\api.py", line 140, in make_request
+    return check_result(method, response.content_type, response.status, await response.text())
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\softs\Lib\site-packages\aiogram\bot\api.py", line 119, in check_result
+    exceptions.ConflictError.detect(description)
+  File "D:\softs\Lib\site-packages\aiogram\utils\exceptions.py", line 140, in detect
+    raise err(cls.text or description)
+aiogram.utils.exceptions.TerminatedByOtherGetUpdates: Terminated by other getupdates request; make sure that only one bot instance is running
+ERROR:aiogram.dispatcher.dispatcher:Cause exception while getting updates.
+Traceback (most recent call last):
+  File "D:\softs\Lib\site-packages\aiogram\dispatcher\dispatcher.py", line 381, in start_polling
+    updates = await self.bot.get_updates(
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\softs\Lib\site-packages\aiogram\bot\bot.py", line 110, in get_updates
+    result = await self.request(api.Methods.GET_UPDATES, payload)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\softs\Lib\site-packages\aiogram\bot\base.py", line 236, in request
+    return await api.make_request(await self.get_session(), self.server, self.__token, method, data, files,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\softs\Lib\site-packages\aiogram\bot\api.py", line 140, in make_request
+    return check_result(method, response.content_type, response.status, await response.text())
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\softs\Lib\site-packages\aiogram\bot\api.py", line 119, in check_result
+    exceptions.ConflictError.detect(description)
+  File "D:\softs\Lib\site-packages\aiogram\utils\exceptions.py", line 140, in detect
+    raise err(cls.text or description)
+aiogram.utils.exceptions.TerminatedByOtherGetUpdates: Terminated by other getupdates request; make sure that only one bot instance is running
+WARNING:aiogram:Goodbye!
+DEBUG:asyncio:Using proactor: IocpProactor
+DEBUG:aiogram:Make request: "getMe" with data: "{}" and files "None"
+DEBUG:aiogram:Response for getMe: [200] "'{"ok":true,"result":{"id":5333826486,"is_bot":true,"first_name":"test_______bot","username":"test_for_flow_evg_bot","can_join_groups":true,"can_read_all_group_messages":false,"supports_inline_queries":false}}'"
+INFO:aiogram:Bot: test_______bot [@test_for_flow_evg_bot]
+INFO:aiogram.dispatcher.dispatcher:Start polling.
+DEBUG:aiogram:Make request: "getWebhookInfo" with data: "{}" and files "None"
+DEBUG:aiogram:Response for getWebhookInfo: [200] "'{"ok":true,"result":{"url":"","has_custom_certificate":false,"pending_update_count":0}}'"
+DEBUG:aiogram:Make request: "getUpdates" with data: "{'timeout': 20}" and files "None"
+DEBUG:aiogram:Response for getUpdates: [200] "'{"ok":true,"result":[]}'"
+DEBUG:aiogram:Make request: "getUpdates" with data: "{'timeout': 20}" and files "None"
+DEBUG:aiogram:Response for getUpdates: [200] "'{"ok":true,"result":[]}'"
+DEBUG:aiogram:Make request: "getUpdates" with data: "{'timeout': 20}" and files "None"
+INFO:aiogram.dispatcher.dispatcher:Stop polling...
+WARNING:aiogram:Goodbye!
+INFO:aiogram:Bot: test_______bot [@test_for_flow_evg_bot]
+INFO:aiogram.dispatcher.dispatcher:Start polling.
+INFO:aiogram.dispatcher.dispatcher:Stop polling...
+WARNING:aiogram:Goodbye!
+INFO:aiogram:Bot: test_______bot [@test_for_flow_evg_bot]
+INFO:aiogram.dispatcher.dispatcher:Start polling.
+INFO:aiogram.dispatcher.dispatcher:Stop polling...
+WARNING:aiogram:Goodbye!
+INFO:aiogram:Bot: test_______bot [@test_for_flow_evg_bot]
+INFO:aiogram.dispatcher.dispatcher:Start polling.
+ERROR:asyncio:Task exception was never retrieved
+future: <Task finished name='Task-7' coro=<Dispatcher._process_polling_updates() done, defined at D:\softs\Lib\site-packages\aiogram\dispatcher\dispatcher.py:407> exception=AttributeError("'int' object has no attribute 'get_tuple'")>
+Traceback (most recent call last):
+  File "D:\softs\Lib\site-packages\aiogram\dispatcher\dispatcher.py", line 415, in _process_polling_updates
+    for responses in itertools.chain.from_iterable(await self.process_updates(updates, fast)):
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\softs\Lib\site-packages\aiogram\dispatcher\dispatcher.py", line 235, in process_updates
+    return await asyncio.gather(*tasks)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\softs\Lib\site-packages\aiogram\dispatcher\handler.py", line 117, in notify
+    response = await handler_obj.handler(*args, **partial_data)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\softs\Lib\site-packages\aiogram\dispatcher\dispatcher.py", line 256, in process_update
+    return await self.message_handlers.notify(update.message)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\softs\Lib\site-packages\aiogram\dispatcher\handler.py", line 117, in notify
+    response = await handler_obj.handler(*args, **partial_data)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\bots_Telegram\design_skillbot\main.py", line 16, in start
+    users.add(user_id)
+  File "D:\bots_Telegram\design_skillbot\Users.py", line 30, in add
+    self.add_row(user.get_tuple())
+                 ^^^^^^^^^^^^^^
+AttributeError: 'int' object has no attribute 'get_tuple'
+ERROR:asyncio:Task exception was never retrieved
+future: <Task finished name='Task-11' coro=<Dispatcher._process_polling_updates() done, defined at D:\softs\Lib\site-packages\aiogram\dispatcher\dispatcher.py:407> exception=AttributeError("'int' object has no attribute 'get_tuple'")>
+Traceback (most recent call last):
+  File "D:\softs\Lib\site-packages\aiogram\dispatcher\dispatcher.py", line 415, in _process_polling_updates
+    for responses in itertools.chain.from_iterable(await self.process_updates(updates, fast)):
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\softs\Lib\site-packages\aiogram\dispatcher\dispatcher.py", line 235, in process_updates
+    return await asyncio.gather(*tasks)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\softs\Lib\site-packages\aiogram\dispatcher\handler.py", line 117, in notify
+    response = await handler_obj.handler(*args, **partial_data)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\softs\Lib\site-packages\aiogram\dispatcher\dispatcher.py", line 256, in process_update
+    return await self.message_handlers.notify(update.message)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\softs\Lib\site-packages\aiogram\dispatcher\handler.py", line 117, in notify
+    response = await handler_obj.handler(*args, **partial_data)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\bots_Telegram\design_skillbot\main.py", line 16, in start
+    users.add(user_id)
+  File "D:\bots_Telegram\design_skillbot\Users.py", line 30, in add
+    self.add_row(user.get_tuple())
+                 ^^^^^^^^^^^^^^
+AttributeError: 'int' object has no attribute 'get_tuple'
+INFO:aiogram.dispatcher.dispatcher:Stop polling...
+WARNING:aiogram:Goodbye!
