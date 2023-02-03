@@ -1,14 +1,13 @@
 import openai
-from config import openai_api_key
 
 
-class OpenAI:
-    def __init__(self):
+class OpenAi:
+    def __init__(self, openai_api_key):
         self.openai = openai
         self.openai.api_key = openai_api_key
 
-    def question(self, text: str):
-        response = self.openai.Completion.create(
+    async def question(self, text: str) -> str:
+        response = await self.openai.Completion.acreate(
             model="text-davinci-003",
             prompt=text,
             temperature=0,
@@ -21,5 +20,5 @@ class OpenAI:
 
 
 if __name__ == "__main__":
-    a = OpenAI()
+    a = OpenAi()
     print(a.question("Hello world!"))

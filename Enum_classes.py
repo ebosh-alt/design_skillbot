@@ -4,6 +4,7 @@ from enum import Enum
 class Flags(Enum):
     NONE = 0
     Payment = 1
+    OpenAi = 2
 
 
 class Steps(Enum):

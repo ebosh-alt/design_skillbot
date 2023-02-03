@@ -69,8 +69,20 @@ async def main_hand(message: types.Message):
     user_id = message.from_user.id
     user = users.get(user_id)
     text = message.text
+    if "никки," in text.lower():
+        await message.reply("Секунду, ищу ответ!")
+        response = await OpenAI.question(text=text.replace("никки,", ""))
+        # print(text_aa+text)
+        # response = await OpenAI.question(text=text_aa+text)
+        await bot.send_message(chat_id=user_id,
+                               text=response,
+                               parse_mode="Markdown",
+                               # reply_markup=functions.create_keyboard(["Спасибо, Никки!"])
 
-    if text == "Структура курса":
+                               )
+
+
+    elif text == "Структура курса":
         await bot.send_message(chat_id=user_id,
                                text=texts.structure_course,
                                reply_markup=functions.create_keyboard(
