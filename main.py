@@ -39,7 +39,7 @@ async def start(message: types.Message):
     users.update_info(user)
 
 
-@dp.message_handler(lambda message: users.get(message.from_user.id).flag.name == "Payment",
+@dp.message_handler(lambda message: users.get(message.from_user.id).flag == Flags.Payment,
                     content_types=types.ContentTypes.TEXT)
 async def check_payment(message: types.Message):
     user_id = message.from_id
@@ -379,7 +379,8 @@ async def main_hand(message: types.Message):
                                parse_mode="Markdown"
                                )
         user.flag = Flags.Test_1
-    elif user.flag.name == "Test_1":
+
+    elif user.flag == Flags.Test_1:
         if text == "Готов(а)":
             await bot.send_message(chat_id=user_id,
                                    text=texts.text_11,
@@ -416,7 +417,7 @@ async def main_hand(message: types.Message):
                                    parse_mode="Markdown"
                                    )
 
-    elif user.flag.name == "Test_2":
+    elif user.flag == Flags.Test_2:
         if text == "Завершить тест":
             await bot.send_message(chat_id=user_id,
                                    text=texts.text_17,
@@ -459,6 +460,7 @@ async def main_hand(message: types.Message):
                                    ),
                                    parse_mode="Markdown"
                                    )
+
     elif text == "Как тренировать насмотренность?":
         await bot.send_message(chat_id=user_id,
                                text=texts.text_20,
