@@ -14,7 +14,10 @@ class Flags(Enum):
     Test_8 = 9
     Test_9 = 10
     Test_10 = 11
-
+    Composition_1 = 23
+    Composition_2 = 24
+    Composition_3 = 25
+    Composition_4 = 26
 
 class Steps(Enum):
     NONE = 0
