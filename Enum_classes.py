@@ -14,6 +14,12 @@ class Flags(Enum):
     Test_8 = 9
     Test_9 = 10
     Test_10 = 11
+    Test_11 = 12
+    Test_12 = 13
+    Test_13 = 14
+    Test_14 = 15
+    Test_15 = 16
+    Test_16 = 17
     Composition_1 = 23
     Composition_2 = 24
     Composition_3 = 25
