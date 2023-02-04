@@ -1914,105 +1914,105 @@ async def main_hand(message: types.Message):
                                    ),
                                    parse_mode="Markdown"
                                    )
-    # elif text == "Что это?":
-    #     await bot.send_message(chat_id=user_id,
-    #                            text=texts.,
-    #                            reply_markup=functions.create_keyboard(
-    #                                name_buttons=[]
-    #                            ),
-    #                            parse_mode="Markdown"
-    #                            )
-    #
-    # elif text == "":
-    #     await bot.send_message(chat_id=user_id,
-    #                            text=texts.,
-    #                            reply_markup=functions.create_keyboard(
-    #                                name_buttons=[]
-    #                            ),
-    #                            parse_mode="Markdown"
-    #                            )
-    #
-    # elif text == "":
-    #     await bot.send_message(chat_id=user_id,
-    #                            text=texts.,
-    #                            reply_markup=functions.create_keyboard(
-    #                                name_buttons=[]
-    #                            ),
-    #                            parse_mode="Markdown"
-    #                            )
-    #
-    # elif text == "":
-    #     await bot.send_message(chat_id=user_id,
-    #                            text=texts.,
-    #                            reply_markup=functions.create_keyboard(
-    #                                name_buttons=[]
-    #                            ),
-    #                            parse_mode="Markdown"
-    #                            )
-    #
-    # elif text == "":
-    #     await bot.send_message(chat_id=user_id,
-    #                            text=texts.,
-    #                            reply_markup=functions.create_keyboard(
-    #                                name_buttons=[]
-    #                            ),
-    #                            parse_mode="Markdown"
-    #                            )
-    #
-    # elif text == "":
-    #     await bot.send_message(chat_id=user_id,
-    #                            text=texts.,
-    #                            reply_markup=functions.create_keyboard(
-    #                                name_buttons=[]
-    #                            ),
-    #                            parse_mode="Markdown"
-    #                            )
-    #
-    # elif text == "":
-    #     await bot.send_message(chat_id=user_id,
-    #                            text=texts.,
-    #                            reply_markup=functions.create_keyboard(
-    #                                name_buttons=[]
-    #                            ),
-    #                            parse_mode="Markdown"
-    #                            )
-    #
-    # elif text == "":
-    #     await bot.send_message(chat_id=user_id,
-    #                            text=texts.,
-    #                            reply_markup=functions.create_keyboard(
-    #                                name_buttons=[]
-    #                            ),
-    #                            parse_mode="Markdown"
-    #                            )
-    #
-    # elif text == "":
-    #     await bot.send_message(chat_id=user_id,
-    #                            text=texts.,
-    #                            reply_markup=functions.create_keyboard(
-    #                                name_buttons=[]
-    #                            ),
-    #                            parse_mode="Markdown"
-    #                            )
-    #
-    # elif text == "":
-    #     await bot.send_message(chat_id=user_id,
-    #                            text=texts.,
-    #                            reply_markup=functions.create_keyboard(
-    #                                name_buttons=[]
-    #                            ),
-    #                            parse_mode="Markdown"
-    #                            )
-    #
-    # elif text == "":
-    #     await bot.send_message(chat_id=user_id,
-    #                            text=texts.,
-    #                            reply_markup=functions.create_keyboard(
-    #                                name_buttons=[]
-    #                            ),
-    #                            parse_mode="Markdown"
-    #                            )
-    #
+    elif text == "Что это?":
+        await bot.send_message(chat_id=user_id,
+                               text=texts.text__47,
+                               reply_markup=functions.create_keyboard(
+                                   name_buttons=["Почему Figma?"]
+                               ),
+                               parse_mode="Markdown"
+                               )
+    
+    elif text == "Почему Figma?":
+        await bot.send_message(chat_id=user_id,
+                               text=texts.text__048,
+                               reply_markup=functions.create_keyboard(
+                                   name_buttons=["Где взять?"]
+                               ),
+                               parse_mode="Markdown"
+                               )
+    
+    elif text == "Где взять?":
+        await bot.send_message(chat_id=user_id,
+                               text=texts.,
+                               reply_markup=functions.create_keyboard(
+                                   name_buttons=["Подробнее, пожалуйста!"]
+                               ),
+                               parse_mode="Markdown"
+                               )
+    
+    elif text == "Подробнее, пожалуйста!":
+        await bot.send_message(chat_id=user_id,
+                               text=texts.,
+                               reply_markup=functions.create_keyboard(
+                                   name_buttons=["Как установить?"]
+                               ),
+                               parse_mode="Markdown"
+                               )
+    
+    elif text == "Как установить?":
+        await bot.send_message(chat_id=user_id,
+                               text=texts.,
+                               reply_markup=functions.create_keyboard(
+                                   name_buttons=["Ок, идем дальше!"]
+                               ),
+                               parse_mode="Markdown"
+                               )
+    
+    elif text == "Ок, идем дальше!":
+        await bot.send_message(chat_id=user_id,
+                               text=texts.,
+                               reply_markup=functions.create_keyboard(
+                                   name_buttons=["Подробнее, пожалуйста!"]
+                               ),
+                               parse_mode="Markdown"
+                               )
+    
+    elif text == "Подробнее, пожалуйста!":
+        await bot.send_message(chat_id=user_id,
+                               text=texts.,
+                               reply_markup=functions.create_keyboard(
+                                   name_buttons=["Что такое слои?"]
+                               ),
+                               parse_mode="Markdown"
+                               )
+    
+    elif text == "Что такое слои?":
+        await bot.send_message(chat_id=user_id,
+                               text=texts.,
+                               reply_markup=functions.create_keyboard(
+                                   name_buttons=["Как работать?"]
+                               ),
+                               parse_mode="Markdown"
+                               )
+    
+    elif text == "Как работать?":
+        await bot.send_message(chat_id=user_id,
+                               text=texts.,
+                               reply_markup=functions.create_keyboard(
+                                   name_buttons=["Как изменить объекты?"]
+                               ),
+                               parse_mode="Markdown"
+                               )
+    
+    elif text == "Как изменить объекты?":
+        await bot.send_message(chat_id=user_id,
+                               text=texts.,
+                               reply_markup=functions.create_keyboard(
+                                   name_buttons=["Ок, идем дальше!"]
+                               ),
+                               parse_mode="Markdown"
+                               )
+    
+    elif text == "Ок, идем дальше!":
+        await bot.send_message(chat_id=user_id,
+                               text=texts.,
+                               reply_markup=functions.create_keyboard(
+                                   name_buttons=[]
+                               ),
+                               parse_mode="Markdown"
+                               )
+    
     # elif text == "":
     #     await bot.send_message(chat_id=user_id,
     #                            text=texts.,
