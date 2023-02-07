@@ -109,8 +109,7 @@ async def main_hand(message: types.Message):
     elif text == "Хочу начать":
         await bot.send_message(chat_id=user_id,
                                text=texts.text_for_payment,
-                               reply_markup=types.ReplyKeyboardRemove()
-                               ,
+                               reply_markup=types.ReplyKeyboardRemove(),
                                parse_mode="Markdown",
                                disable_web_page_preview=True,
                                )
@@ -2795,7 +2794,6 @@ async def main_hand(message: types.Message):
                                    disable_web_page_preview=True
                                    )
 
-
         elif text == "Завершить тест":
             await bot.send_message(chat_id=user_id,
                                    text=texts.text__0119,
@@ -2971,7 +2969,6 @@ async def main_hand(message: types.Message):
                                    parse_mode="Markdown",
                                    disable_web_page_preview=True
                                    )
-
 
         elif text == "Завершить тест":
             await bot.send_message(chat_id=user_id,
