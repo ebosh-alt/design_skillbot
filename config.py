@@ -6,7 +6,7 @@ from aiogram import Bot, Dispatcher, executor
 from Openai import OpenAi
 from Users import Users
 
-api_key = "5333826486:AAGWXbywv1pQ9AJ75d1zafg2xwBRBjtyYnI"
+api_key = "5993284335:AAHuoszGTlENSxll7RzDEfvkRracX_rRBIc"
 openai_api_key = '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'
 
 bot = Bot(token=api_key)
@@ -33,3 +33,5 @@ code_for_payment = "SBND18244887"
 introductory_part = "Ты Никки — робот, который учит дизайну и правилам дизайна. Тебе нужно ответить на вопрос твоего " \
                     "ученика. Он спрашивает:"
 OpenAI = OpenAi(openai_api_key)
+
+text_for_pay = "\n\nБолее подробно я отвечу после начала курса — для этого [активируйте полную версию](https://www.skillbots.ru/design?utm_source=trial_tg&utm_medium=tgbot) 😊"

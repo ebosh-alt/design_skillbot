@@ -2,6 +2,7 @@ from aiogram import types
 import time
 
 from Enum_classes import Flags
+from Reminders import Reminders
 from Users import User
 from config import *
 import keyboards
@@ -13,11 +14,13 @@ import functions
 async def start(message: types.Message):
     user_id = message.from_user.id
     user = users.get(user_id)
+
     if not user:
         user = User(key=user_id)
         users.add(user)
         user = users.get(user_id)
-        user.username = message.from_user.username
+        user.username = message.from_user.first_name
+    user.payment = False
     # print(texts.start_text.format(username=user.username))
     await bot.send_message(chat_id=user_id,
                            text=texts.start_text.format(username=user.username),
@@ -33,9 +36,10 @@ async def start(message: types.Message):
     user_id = message.from_user.id
     user = users.get(user_id)
     if not user:
-        users.add(user_id)
+        user = User(key=user_id)
+        users.add(user)
         user = users.get(user_id)
-        user.username = message.from_user.username
+        user.username = message.from_user.first_name
     users.update_info(user)
 
 
@@ -72,8 +76,10 @@ async def main_hand(message: types.Message):
     user = users.get(user_id)
     text = message.text
     if "никки," in text.lower():
-        await message.reply("Минуту, сейчас я отвечу")
+        await message.reply("Загружаю твой вопрос... Подожди минутку")
         response = await OpenAI.question(text=introductory_part + text)
+        if not user.payment:
+            response += text_for_pay
         await bot.send_message(chat_id=user_id,
                                text=response,
                                parse_mode="Markdown",
@@ -103,9 +109,8 @@ async def main_hand(message: types.Message):
     elif text == "Хочу начать":
         await bot.send_message(chat_id=user_id,
                                text=texts.text_for_payment,
-                               reply_markup=functions.create_keyboard(
-                                   name_buttons=[]
-                               ),
+                               reply_markup=types.ReplyKeyboardRemove()
+                               ,
                                parse_mode="Markdown",
                                disable_web_page_preview=True,
                                )
@@ -424,7 +429,8 @@ async def main_hand(message: types.Message):
                                    reply_markup=functions.create_keyboard(
                                        name_buttons=["Ответ 1", "Ответ 2", "Ответ 3"]
                                    ),
-                                   parse_mode="Markdown"
+                                   parse_mode="Markdown",
+                                   disable_web_page_preview=True
                                    )
 
         elif text == "Следующий вопрос":
@@ -433,7 +439,8 @@ async def main_hand(message: types.Message):
                                    reply_markup=functions.create_keyboard(
                                        name_buttons=["Ответ 1", "Ответ 2", "Ответ 3"]
                                    ),
-                                   parse_mode="Markdown"
+                                   parse_mode="Markdown",
+                                   disable_web_page_preview=True
                                    )
             user.flag = Flags.Test_2
 
@@ -443,7 +450,8 @@ async def main_hand(message: types.Message):
                                    reply_markup=functions.create_keyboard(
                                        name_buttons=["Следующий вопрос"]
                                    ),
-                                   parse_mode="Markdown"
+                                   parse_mode="Markdown",
+                                   disable_web_page_preview=True
                                    )
         else:
             await bot.send_message(chat_id=user_id,
@@ -451,7 +459,8 @@ async def main_hand(message: types.Message):
                                    reply_markup=functions.create_keyboard(
                                        name_buttons=["Следующий вопрос"]
                                    ),
-                                   parse_mode="Markdown"
+                                   parse_mode="Markdown",
+                                   disable_web_page_preview=True
                                    )
 
     elif user.flag == Flags.Test_2:
@@ -461,7 +470,8 @@ async def main_hand(message: types.Message):
                                    reply_markup=functions.create_keyboard(
                                        name_buttons=["Готов(а)"]
                                    ),
-                                   parse_mode="Markdown"
+                                   parse_mode="Markdown",
+                                   disable_web_page_preview=True
                                    )
         # Переход к 2 главе
         elif text == "Готов(а)":
@@ -470,14 +480,16 @@ async def main_hand(message: types.Message):
                                    reply_markup=functions.create_keyboard(
                                        name_buttons=[]
                                    ),
-                                   parse_mode="Markdown"
+                                   parse_mode="Markdown",
+                                   disable_web_page_preview=True
                                    )
             await bot.send_message(chat_id=user_id,
                                    text=texts.text_19,
                                    reply_markup=functions.create_keyboard(
                                        name_buttons=["Как тренировать насмотренность?"]
                                    ),
-                                   parse_mode="Markdown"
+                                   parse_mode="Markdown",
+                                   disable_web_page_preview=True
                                    )
             user.flag = Flags.NONE
 
@@ -487,7 +499,8 @@ async def main_hand(message: types.Message):
                                    reply_markup=functions.create_keyboard(
                                        name_buttons=["Завершить тест"]
                                    ),
-                                   parse_mode="Markdown"
+                                   parse_mode="Markdown",
+                                   disable_web_page_preview=True
                                    )
         else:
             await bot.send_message(chat_id=user_id,
@@ -495,7 +508,8 @@ async def main_hand(message: types.Message):
                                    reply_markup=functions.create_keyboard(
                                        name_buttons=["Завершить тест"]
                                    ),
-                                   parse_mode="Markdown"
+                                   parse_mode="Markdown",
+                                   disable_web_page_preview=True
                                    )
 
     elif text == "Как тренировать насмотренность?":
@@ -638,7 +652,8 @@ async def main_hand(message: types.Message):
                                    reply_markup=functions.create_keyboard(
                                        name_buttons=[]
                                    ),
-                                   parse_mode="Markdown"
+                                   parse_mode="Markdown",
+                                   disable_web_page_preview=True
                                    )
 
             await bot.send_photo(chat_id=user_id,
@@ -656,7 +671,8 @@ async def main_hand(message: types.Message):
                                    reply_markup=functions.create_keyboard(
                                        name_buttons=["Ответ 1", "Ответ 2", "Ответ 3"]
                                    ),
-                                   parse_mode="Markdown"
+                                   parse_mode="Markdown",
+                                   disable_web_page_preview=True
                                    )
             user.flag = Flags.Test_4
 
@@ -666,7 +682,8 @@ async def main_hand(message: types.Message):
                                    reply_markup=functions.create_keyboard(
                                        name_buttons=["Следующий вопрос"]
                                    ),
-                                   parse_mode="Markdown"
+                                   parse_mode="Markdown",
+                                   disable_web_page_preview=True
                                    )
 
         else:
@@ -675,7 +692,8 @@ async def main_hand(message: types.Message):
                                    reply_markup=functions.create_keyboard(
                                        name_buttons=["Следующий вопрос"]
                                    ),
-                                   parse_mode="Markdown"
+                                   parse_mode="Markdown",
+                                   disable_web_page_preview=True
                                    )
     # тест 4
     elif user.flag == Flags.Test_4:
@@ -685,7 +703,8 @@ async def main_hand(message: types.Message):
                                    reply_markup=functions.create_keyboard(
                                        name_buttons=["Готов(а)"]
                                    ),
-                                   parse_mode="Markdown"
+                                   parse_mode="Markdown",
+                                   disable_web_page_preview=True
                                    )
         # Переход к 3 главе
         elif text == "Готов(а)":
@@ -694,14 +713,16 @@ async def main_hand(message: types.Message):
                                    reply_markup=functions.create_keyboard(
                                        name_buttons=[]
                                    ),
-                                   parse_mode="Markdown"
+                                   parse_mode="Markdown",
+                                   disable_web_page_preview=True
                                    )
             await bot.send_message(chat_id=user_id,
                                    text=texts.text_43,
                                    reply_markup=functions.create_keyboard(
                                        name_buttons=["Скоро я тоже так смогу!", "А вдруг у меня не получится?"]
                                    ),
-                                   parse_mode="Markdown"
+                                   parse_mode="Markdown",
+                                   disable_web_page_preview=True
                                    )
             user.flag = Flags.NONE
 
@@ -711,7 +732,8 @@ async def main_hand(message: types.Message):
                                    reply_markup=functions.create_keyboard(
                                        name_buttons=["Завершить тест"]
                                    ),
-                                   parse_mode="Markdown"
+                                   parse_mode="Markdown",
+                                   disable_web_page_preview=True
                                    )
         else:
             await bot.send_message(chat_id=user_id,
@@ -719,7 +741,8 @@ async def main_hand(message: types.Message):
                                    reply_markup=functions.create_keyboard(
                                        name_buttons=["Завершить тест"]
                                    ),
-                                   parse_mode="Markdown"
+                                   parse_mode="Markdown",
+                                   disable_web_page_preview=True
                                    )
 
     elif text == "Скоро я тоже так смогу!" or text == "А вдруг у меня не получится?":
@@ -1084,7 +1107,8 @@ async def main_hand(message: types.Message):
                                    reply_markup=functions.create_keyboard(
                                        name_buttons=[]
                                    ),
-                                   parse_mode="Markdown"
+                                   parse_mode="Markdown",
+                                   disable_web_page_preview=True
                                    )
 
             await bot.send_photo(chat_id=user_id,
@@ -1114,7 +1138,8 @@ async def main_hand(message: types.Message):
                                    reply_markup=functions.create_keyboard(
                                        name_buttons=["Следующий вопрос"]
                                    ),
-                                   parse_mode="Markdown"
+                                   parse_mode="Markdown",
+                                   disable_web_page_preview=True
                                    )
 
         else:
@@ -1123,7 +1148,8 @@ async def main_hand(message: types.Message):
                                    reply_markup=functions.create_keyboard(
                                        name_buttons=["Следующий вопрос"]
                                    ),
-                                   parse_mode="Markdown"
+                                   parse_mode="Markdown",
+                                   disable_web_page_preview=True
                                    )
 
     # тест 6
@@ -1134,7 +1160,8 @@ async def main_hand(message: types.Message):
                                    reply_markup=functions.create_keyboard(
                                        name_buttons=["Готов(а)"]
                                    ),
-                                   parse_mode="Markdown"
+                                   parse_mode="Markdown",
+                                   disable_web_page_preview=True
                                    )
         # Переход к 4 главе
         elif text == "Готов(а)":
@@ -1143,14 +1170,16 @@ async def main_hand(message: types.Message):
                                    reply_markup=functions.create_keyboard(
                                        name_buttons=[]
                                    ),
-                                   parse_mode="Markdown"
+                                   parse_mode="Markdown",
+                                   disable_web_page_preview=True
                                    )
             await bot.send_message(chat_id=user_id,
                                    text=texts.text_87,
                                    reply_markup=functions.create_keyboard(
                                        name_buttons=["Посмотреть, что там"]
                                    ),
-                                   parse_mode="Markdown"
+                                   parse_mode="Markdown",
+                                   disable_web_page_preview=True
                                    )
             user.flag = Flags.NONE
 
@@ -1160,7 +1189,8 @@ async def main_hand(message: types.Message):
                                    reply_markup=functions.create_keyboard(
                                        name_buttons=["Завершить тест"]
                                    ),
-                                   parse_mode="Markdown"
+                                   parse_mode="Markdown",
+                                   disable_web_page_preview=True
                                    )
         else:
             await bot.send_message(chat_id=user_id,
@@ -1168,7 +1198,8 @@ async def main_hand(message: types.Message):
                                    reply_markup=functions.create_keyboard(
                                        name_buttons=["Завершить тест"]
                                    ),
-                                   parse_mode="Markdown"
+                                   parse_mode="Markdown",
+                                   disable_web_page_preview=True
                                    )
 
     elif text == "Посмотреть, что там":
@@ -1197,14 +1228,16 @@ async def main_hand(message: types.Message):
                                reply_markup=functions.create_keyboard(
                                    name_buttons=[]
                                ),
-                               parse_mode="Markdown"
+                               parse_mode="Markdown",
+                               disable_web_page_preview=True
                                )
         await bot.send_message(chat_id=user_id,
                                text=texts.text_91,
                                reply_markup=functions.create_keyboard(
                                    name_buttons=[]
                                ),
-                               parse_mode="Markdown"
+                               parse_mode="Markdown",
+                               disable_web_page_preview=True
                                )
         await bot.send_message(chat_id=user_id,
                                text=texts.text_92,
@@ -1221,14 +1254,16 @@ async def main_hand(message: types.Message):
                                reply_markup=functions.create_keyboard(
                                    name_buttons=[]
                                ),
-                               parse_mode="Markdown"
+                               parse_mode="Markdown",
+                               disable_web_page_preview=True
                                )
         await bot.send_message(chat_id=user_id,
                                text=texts.text_94,
                                reply_markup=functions.create_keyboard(
                                    name_buttons=[]
                                ),
-                               parse_mode="Markdown"
+                               parse_mode="Markdown",
+                               disable_web_page_preview=True
                                )
         await bot.send_photo(chat_id=user_id,
                              photo=texts.link_photo_26)
@@ -1251,7 +1286,8 @@ async def main_hand(message: types.Message):
                                reply_markup=functions.create_keyboard(
                                    name_buttons=[]
                                ),
-                               parse_mode="Markdown"
+                               parse_mode="Markdown",
+                               disable_web_page_preview=True
                                )
 
         await bot.send_photo(chat_id=user_id,
@@ -1275,7 +1311,8 @@ async def main_hand(message: types.Message):
                                reply_markup=functions.create_keyboard(
                                    name_buttons=[]
                                ),
-                               parse_mode="Markdown"
+                               parse_mode="Markdown",
+                               disable_web_page_preview=True
                                )
 
         await bot.send_photo(chat_id=user_id,
@@ -1299,7 +1336,8 @@ async def main_hand(message: types.Message):
                                reply_markup=functions.create_keyboard(
                                    name_buttons=[]
                                ),
-                               parse_mode="Markdown"
+                               parse_mode="Markdown",
+                               disable_web_page_preview=True
                                )
 
         await bot.send_photo(chat_id=user_id,
@@ -1613,7 +1651,8 @@ async def main_hand(message: types.Message):
                                    reply_markup=functions.create_keyboard(
                                        name_buttons=[]
                                    ),
-                                   parse_mode="Markdown"
+                                   parse_mode="Markdown",
+                                   disable_web_page_preview=True
                                    )
 
             await bot.send_photo(chat_id=user_id,
@@ -1631,7 +1670,8 @@ async def main_hand(message: types.Message):
                                    reply_markup=functions.create_keyboard(
                                        name_buttons=["Ответ 1", "Ответ 2", "Ответ 3"]
                                    ),
-                                   parse_mode="Markdown"
+                                   parse_mode="Markdown",
+                                   disable_web_page_preview=True
                                    )
             user.flag = Flags.Test_8
 
@@ -1641,7 +1681,8 @@ async def main_hand(message: types.Message):
                                    reply_markup=functions.create_keyboard(
                                        name_buttons=["Следующий вопрос"]
                                    ),
-                                   parse_mode="Markdown"
+                                   parse_mode="Markdown",
+                                   disable_web_page_preview=True
                                    )
 
         else:
@@ -1650,7 +1691,8 @@ async def main_hand(message: types.Message):
                                    reply_markup=functions.create_keyboard(
                                        name_buttons=["Следующий вопрос"]
                                    ),
-                                   parse_mode="Markdown"
+                                   parse_mode="Markdown",
+                                   disable_web_page_preview=True
                                    )
     # тест 4
     elif user.flag == Flags.Test_8:
@@ -1660,7 +1702,8 @@ async def main_hand(message: types.Message):
                                    reply_markup=functions.create_keyboard(
                                        name_buttons=["Готов(а)"]
                                    ),
-                                   parse_mode="Markdown"
+                                   parse_mode="Markdown",
+                                   disable_web_page_preview=True
                                    )
         # Переход к 5 главе
         elif text == "Готов(а)":
@@ -1669,14 +1712,16 @@ async def main_hand(message: types.Message):
                                    reply_markup=functions.create_keyboard(
                                        name_buttons=[]
                                    ),
-                                   parse_mode="Markdown"
+                                   parse_mode="Markdown",
+                                   disable_web_page_preview=True
                                    )
             await bot.send_message(chat_id=user_id,
                                    text=texts.text_43,
                                    reply_markup=functions.create_keyboard(
                                        name_buttons=["Как же выбрать цвет?"]
                                    ),
-                                   parse_mode="Markdown"
+                                   parse_mode="Markdown",
+                                   disable_web_page_preview=True
                                    )
             user.flag = Flags.NONE
 
@@ -1686,7 +1731,8 @@ async def main_hand(message: types.Message):
                                    reply_markup=functions.create_keyboard(
                                        name_buttons=["Завершить тест"]
                                    ),
-                                   parse_mode="Markdown"
+                                   parse_mode="Markdown",
+                                   disable_web_page_preview=True
                                    )
         else:
             await bot.send_message(chat_id=user_id,
@@ -1694,7 +1740,8 @@ async def main_hand(message: types.Message):
                                    reply_markup=functions.create_keyboard(
                                        name_buttons=["Завершить тест"]
                                    ),
-                                   parse_mode="Markdown"
+                                   parse_mode="Markdown",
+                                   disable_web_page_preview=True
                                    )
 
     elif text == "Как же выбрать цвет?":
@@ -1931,13 +1978,13 @@ async def main_hand(message: types.Message):
         await bot.send_message(chat_id=user_id,
                                text=texts.text__36,
                                reply_markup=functions.create_keyboard(
-                                   name_buttons=["Спасибо, очень интересно!"]
+                                   name_buttons=["Спасибо, очень интeрeсно!"]
                                ),
                                parse_mode="Markdown",
                                disable_web_page_preview=True,
                                )
 
-    elif text == "Спасибо, очень интересно!":
+    elif text == "Спасибо, очень интeрeсно!":
         await bot.send_message(chat_id=user_id,
                                text=texts.text__37,
                                reply_markup=functions.create_keyboard(
@@ -1955,7 +2002,8 @@ async def main_hand(message: types.Message):
                                    reply_markup=functions.create_keyboard(
                                        name_buttons=[]
                                    ),
-                                   parse_mode="Markdown"
+                                   parse_mode="Markdown",
+                                   disable_web_page_preview=True
                                    )
 
             await bot.send_photo(chat_id=user_id,
@@ -1973,7 +2021,8 @@ async def main_hand(message: types.Message):
                                    reply_markup=functions.create_keyboard(
                                        name_buttons=["Ответ 1", "Ответ 2", "Ответ 3"]
                                    ),
-                                   parse_mode="Markdown"
+                                   parse_mode="Markdown",
+                                   disable_web_page_preview=True
                                    )
             user.flag = Flags.Test_10
 
@@ -1983,7 +2032,8 @@ async def main_hand(message: types.Message):
                                    reply_markup=functions.create_keyboard(
                                        name_buttons=["Следующий вопрос"]
                                    ),
-                                   parse_mode="Markdown"
+                                   parse_mode="Markdown",
+                                   disable_web_page_preview=True
                                    )
 
         else:
@@ -1992,7 +2042,8 @@ async def main_hand(message: types.Message):
                                    reply_markup=functions.create_keyboard(
                                        name_buttons=["Следующий вопрос"]
                                    ),
-                                   parse_mode="Markdown"
+                                   parse_mode="Markdown",
+                                   disable_web_page_preview=True
                                    )
     # тест 10
     elif user.flag == Flags.Test_10:
@@ -2002,7 +2053,8 @@ async def main_hand(message: types.Message):
                                    reply_markup=functions.create_keyboard(
                                        name_buttons=["Готов(а)"]
                                    ),
-                                   parse_mode="Markdown"
+                                   parse_mode="Markdown",
+                                   disable_web_page_preview=True
                                    )
         # Переход к 6 главе
         elif text == "Готов(а)":
@@ -2011,14 +2063,16 @@ async def main_hand(message: types.Message):
                                    reply_markup=functions.create_keyboard(
                                        name_buttons=[]
                                    ),
-                                   parse_mode="Markdown"
+                                   parse_mode="Markdown",
+                                   disable_web_page_preview=True
                                    )
             await bot.send_message(chat_id=user_id,
                                    text=texts.text__46,
                                    reply_markup=functions.create_keyboard(
                                        name_buttons=["Что это?"]
                                    ),
-                                   parse_mode="Markdown"
+                                   parse_mode="Markdown",
+                                   disable_web_page_preview=True
                                    )
             user.flag = Flags.NONE
 
@@ -2028,7 +2082,8 @@ async def main_hand(message: types.Message):
                                    reply_markup=functions.create_keyboard(
                                        name_buttons=["Завершить тест"]
                                    ),
-                                   parse_mode="Markdown"
+                                   parse_mode="Markdown",
+                                   disable_web_page_preview=True
                                    )
         else:
             await bot.send_message(chat_id=user_id,
@@ -2036,7 +2091,8 @@ async def main_hand(message: types.Message):
                                    reply_markup=functions.create_keyboard(
                                        name_buttons=["Завершить тест"]
                                    ),
-                                   parse_mode="Markdown"
+                                   parse_mode="Markdown",
+                                   disable_web_page_preview=True
                                    )
     elif text == "Что это?":
         await bot.send_message(chat_id=user_id,
@@ -2089,13 +2145,13 @@ async def main_hand(message: types.Message):
         await bot.send_message(chat_id=user_id,
                                text=texts.text__051,
                                reply_markup=functions.create_keyboard(
-                                   name_buttons=["Подробнее, пожалуйста!"]
+                                   name_buttons=["Подробнее, пожaлуйста!"]
                                ),
                                parse_mode="Markdown",
                                disable_web_page_preview=True,
                                )
 
-    elif text == "Подробнее, пожалуйста!":
+    elif text == "Подробнее, пожaлуйста!":
         await bot.send_message(chat_id=user_id,
                                text=texts.text__052,
                                reply_markup=functions.create_keyboard(
@@ -2136,13 +2192,13 @@ async def main_hand(message: types.Message):
         await bot.send_message(chat_id=user_id,
                                text=texts.text__055,
                                reply_markup=functions.create_keyboard(
-                                   name_buttons=["Ок, идем дальше!"]
+                                   name_buttons=["Ок, идeм дальше!"]
                                ),
                                parse_mode="Markdown",
                                disable_web_page_preview=True,
                                )
 
-    elif text == "Ок, идем дальше!":
+    elif text == "Ок, идeм дальше!":
         await bot.send_message(chat_id=user_id,
                                text=texts.text__056,
                                parse_mode="Markdown",
@@ -2182,13 +2238,13 @@ async def main_hand(message: types.Message):
         await bot.send_message(chat_id=user_id,
                                text=texts.text__059,
                                reply_markup=functions.create_keyboard(
-                                   name_buttons=["Понятно!"]
+                                   name_buttons=["Понятнo!"]
                                ),
                                parse_mode="Markdown",
                                disable_web_page_preview=True,
                                )
 
-    elif text == "Понятно!":
+    elif text == "Понятнo!":
         await bot.send_message(chat_id=user_id,
                                text=texts.text__060,
                                reply_markup=functions.create_keyboard(
@@ -2233,13 +2289,13 @@ async def main_hand(message: types.Message):
         await bot.send_message(chat_id=user_id,
                                text=texts.text__064,
                                reply_markup=functions.create_keyboard(
-                                   name_buttons=["Ок, идем дальше!"]
+                                   name_buttons=["Oк, идем дальше!"]
                                ),
                                parse_mode="Markdown",
                                disable_web_page_preview=True,
                                )
 
-    elif text == "Ок, идем дальше!":
+    elif text == "Oк, идем дальше!":
         await bot.send_message(chat_id=user_id,
                                text=texts.text__065,
                                parse_mode="Markdown",
@@ -2248,13 +2304,13 @@ async def main_hand(message: types.Message):
         await bot.send_message(chat_id=user_id,
                                text=texts.text__066,
                                reply_markup=functions.create_keyboard(
-                                   name_buttons=["Подробнее!"]
+                                   name_buttons=["Подрoбнeе!"]
                                ),
                                parse_mode="Markdown",
                                disable_web_page_preview=True,
                                )
 
-    elif text == "Подробнее!":
+    elif text == "Подрoбнeе!":
         await bot.send_message(chat_id=user_id,
                                text=texts.text__067,
                                parse_mode="Markdown",
@@ -2283,13 +2339,13 @@ async def main_hand(message: types.Message):
         await bot.send_message(chat_id=user_id,
                                text=texts.text__071,
                                reply_markup=functions.create_keyboard(
-                                   name_buttons=["Отлично!"]
+                                   name_buttons=["Oтлично!"]
                                ),
                                parse_mode="Markdown",
                                disable_web_page_preview=True,
                                )
 
-    elif text == "Отлично!":
+    elif text == "Oтлично!":
         await bot.send_message(chat_id=user_id,
                                text=texts.text__072,
                                reply_markup=functions.create_keyboard(
@@ -2328,13 +2384,13 @@ async def main_hand(message: types.Message):
         await bot.send_message(chat_id=user_id,
                                text=texts.text__076,
                                reply_markup=functions.create_keyboard(
-                                   name_buttons=["Я готов(а)"]
+                                   name_buttons=["Я готoв(а)"]
                                ),
                                parse_mode="Markdown",
                                disable_web_page_preview=True,
                                )
 
-    elif text == "Я готов(а)":
+    elif text == "Я готoв(а)":
         await bot.send_message(chat_id=user_id,
                                text=texts.text__077,
                                parse_mode="Markdown",
@@ -2348,52 +2404,53 @@ async def main_hand(message: types.Message):
                                parse_mode="Markdown",
                                disable_web_page_preview=True,
                                )
+
     elif text == "Не терпится узнать подробности":
         await bot.send_message(chat_id=user_id,
                                text=texts.text__079,
                                reply_markup=functions.create_keyboard(
-                                   name_buttons=["Как это работает?"]
+                                   name_buttons=["Кaк это работает?"]
                                ),
                                parse_mode="Markdown",
                                disable_web_page_preview=True,
                                )
-    elif text == "Как это работает?":
+    elif text == "Кaк это работает?":
         await bot.send_message(chat_id=user_id,
                                text=texts.text__080,
                                reply_markup=functions.create_keyboard(
-                                   name_buttons=["Подробнее!"]
+                                   name_buttons=["Подробнee!"]
                                ),
                                parse_mode="Markdown",
                                disable_web_page_preview=True,
                                )
-    elif text == "Подробнее!":
+    elif text == "Подробнee!":
         await bot.send_message(chat_id=user_id,
                                text=texts.text__081,
                                reply_markup=functions.create_keyboard(
-                                   name_buttons=["Понятно"]
+                                   name_buttons=["Понятнo"]
                                ),
                                parse_mode="Markdown",
                                disable_web_page_preview=True,
                                )
-    elif text == "Понятно":
+    elif text == "Понятнo":
         await bot.send_message(chat_id=user_id,
                                text=texts.text__082,
                                reply_markup=functions.create_keyboard(
-                                   name_buttons=["Понятно"]
+                                   name_buttons=["Пoнятно"]
                                ),
                                parse_mode="Markdown",
                                disable_web_page_preview=True,
                                )
-    elif text == "Понятно":
+    elif text == "Пoнятно":
         await bot.send_message(chat_id=user_id,
                                text=texts.text__083,
                                reply_markup=functions.create_keyboard(
-                                   name_buttons=["Ок, идем дальше!"]
+                                   name_buttons=["Oк, идем дальшe!"]
                                ),
                                parse_mode="Markdown",
                                disable_web_page_preview=True,
                                )
-    elif text == "Ок, идем дальше!":
+    elif text == "Oк, идем дальшe!":
         await bot.send_message(chat_id=user_id,
                                text=texts.text__084,
                                reply_markup=functions.create_keyboard(
@@ -2406,12 +2463,12 @@ async def main_hand(message: types.Message):
         await bot.send_message(chat_id=user_id,
                                text=texts.text__085,
                                reply_markup=functions.create_keyboard(
-                                   name_buttons=["Покажи пример!"]
+                                   name_buttons=["Покажи примeр!"]
                                ),
                                parse_mode="Markdown",
                                disable_web_page_preview=True,
                                )
-    elif text == "Покажи пример!":
+    elif text == "Покажи примeр!":
         await bot.send_photo(chat_id=user_id,
                              photo=texts.link_photo_061,
                              )
@@ -2424,12 +2481,12 @@ async def main_hand(message: types.Message):
         await bot.send_message(chat_id=user_id,
                                text=texts.text__086,
                                reply_markup=functions.create_keyboard(
-                                   name_buttons=["Покажи пример!"]
+                                   name_buttons=["Покaжи пример!"]
                                ),
                                parse_mode="Markdown",
                                disable_web_page_preview=True,
                                )
-    elif text == "Покажи пример!":
+    elif text == "Покaжи пример!":
         await bot.send_photo(chat_id=user_id,
                              photo=texts.link_photo_064,
                              )
@@ -2484,14 +2541,16 @@ async def main_hand(message: types.Message):
         if text == "Начать тест":
             await bot.send_message(chat_id=user_id,
                                    text=texts.text__092,
-                                   parse_mode="Markdown"
+                                   parse_mode="Markdown",
+                                   disable_web_page_preview=True
                                    )
             await bot.send_message(chat_id=user_id,
                                    text=texts.text__093,
                                    reply_markup=functions.create_keyboard(
                                        name_buttons=["Ответ 1", "Ответ 2", "Ответ 3"]
                                    ),
-                                   parse_mode="Markdown"
+                                   parse_mode="Markdown",
+                                   disable_web_page_preview=True
                                    )
         elif text == "Ответ 3":
             await bot.send_message(chat_id=user_id,
@@ -2499,7 +2558,8 @@ async def main_hand(message: types.Message):
                                    reply_markup=functions.create_keyboard(
                                        name_buttons=["Следующий вопрос"]
                                    ),
-                                   parse_mode="Markdown"
+                                   parse_mode="Markdown",
+                                   disable_web_page_preview=True
                                    )
             user.flag = Flags.Test_12
 
@@ -2509,7 +2569,8 @@ async def main_hand(message: types.Message):
                                    reply_markup=functions.create_keyboard(
                                        name_buttons=["Следующий вопрос"]
                                    ),
-                                   parse_mode="Markdown"
+                                   parse_mode="Markdown",
+                                   disable_web_page_preview=True
                                    )
             user.flag = Flags.Test_12
 
@@ -2520,7 +2581,8 @@ async def main_hand(message: types.Message):
                                    reply_markup=functions.create_keyboard(
                                        name_buttons=["Ответ 1", "Ответ 2", "Ответ 3"]
                                    ),
-                                   parse_mode="Markdown"
+                                   parse_mode="Markdown",
+                                   disable_web_page_preview=True
                                    )
         elif text == "Ответ 1":
             await bot.send_message(chat_id=user_id,
@@ -2528,7 +2590,8 @@ async def main_hand(message: types.Message):
                                    reply_markup=functions.create_keyboard(
                                        name_buttons=["Завершить тест"]
                                    ),
-                                   parse_mode="Markdown"
+                                   parse_mode="Markdown",
+                                   disable_web_page_preview=True
                                    )
             user.flag = Flags.Test_12
 
@@ -2538,7 +2601,8 @@ async def main_hand(message: types.Message):
                                    reply_markup=functions.create_keyboard(
                                        name_buttons=["Завершить тест"]
                                    ),
-                                   parse_mode="Markdown"
+                                   parse_mode="Markdown",
+                                   disable_web_page_preview=True
                                    )
 
         elif text == "Завершить тест":
@@ -2547,20 +2611,23 @@ async def main_hand(message: types.Message):
                                    reply_markup=functions.create_keyboard(
                                        name_buttons=["Я готов(а)"]
                                    ),
-                                   parse_mode="Markdown"
+                                   parse_mode="Markdown",
+                                   disable_web_page_preview=True
                                    )
 
         elif text == "Я готов(а)":
             await bot.send_message(chat_id=user_id,
                                    text=texts.text__0100,
-                                   parse_mode="Markdown"
+                                   parse_mode="Markdown",
+                                   disable_web_page_preview=True
                                    )
             await bot.send_message(chat_id=user_id,
                                    text=texts.text__0101,
                                    reply_markup=functions.create_keyboard(
                                        name_buttons=["Что за этапы?"]
                                    ),
-                                   parse_mode="Markdown"
+                                   parse_mode="Markdown",
+                                   disable_web_page_preview=True
                                    )
             user.flag = Flags.NONE
 
@@ -2577,21 +2644,21 @@ async def main_hand(message: types.Message):
         await bot.send_message(chat_id=user_id,
                                text=texts.text__0103,
                                reply_markup=functions.create_keyboard(
-                                   name_buttons=["Понятно"]
+                                   name_buttons=["Пoнятнo"]
                                ),
                                parse_mode="Markdown",
                                disable_web_page_preview=True,
                                )
-    elif text == "Понятно":
+    elif text == "Пoнятнo":
         await bot.send_message(chat_id=user_id,
                                text=texts.text__0104,
                                reply_markup=functions.create_keyboard(
-                                   name_buttons=["Ок, дальше!"]
+                                   name_buttons=["Ок, дaльше!"]
                                ),
                                parse_mode="Markdown",
                                disable_web_page_preview=True,
                                )
-    elif text == "Ок, дальше!":
+    elif text == "Ок, дaльше!":
         await bot.send_message(chat_id=user_id,
                                text=texts.text__0105,
                                reply_markup=functions.create_keyboard(
@@ -2613,7 +2680,7 @@ async def main_hand(message: types.Message):
         await bot.send_message(chat_id=user_id,
                                text=texts.text__0107,
                                reply_markup=functions.create_keyboard(
-                                   name_buttons=["Покажи пример!"]
+                                   name_buttons=["Пoкажи пример!"]
                                ),
                                parse_mode="Markdown",
                                disable_web_page_preview=True,
@@ -2647,12 +2714,12 @@ async def main_hand(message: types.Message):
         await bot.send_message(chat_id=user_id,
                                text=texts.text__0110,
                                reply_markup=functions.create_keyboard(
-                                   name_buttons=["Спасибо, Никки!"]
+                                   name_buttons=["Спaсибo, Никки!"]
                                ),
                                parse_mode="Markdown",
                                disable_web_page_preview=True
                                )
-    elif text == "Спасибо, Никки!":
+    elif text == "Спaсибo, Никки!":
         await bot.send_message(chat_id=user_id,
                                text=texts.text__0111,
                                reply_markup=functions.create_keyboard(
@@ -2667,14 +2734,16 @@ async def main_hand(message: types.Message):
         if text == "Начать тест":
             await bot.send_message(chat_id=user_id,
                                    text=texts.text__0112,
-                                   parse_mode="Markdown"
+                                   parse_mode="Markdown",
+                                   disable_web_page_preview=True
                                    )
             await bot.send_message(chat_id=user_id,
                                    text=texts.text__0113,
                                    reply_markup=functions.create_keyboard(
                                        name_buttons=["Ответ 1", "Ответ 2", "Ответ 3"]
                                    ),
-                                   parse_mode="Markdown"
+                                   parse_mode="Markdown",
+                                   disable_web_page_preview=True
                                    )
         elif text == "Ответ 2":
             await bot.send_message(chat_id=user_id,
@@ -2682,7 +2751,8 @@ async def main_hand(message: types.Message):
                                    reply_markup=functions.create_keyboard(
                                        name_buttons=["Следующий вопрос"]
                                    ),
-                                   parse_mode="Markdown"
+                                   parse_mode="Markdown",
+                                   disable_web_page_preview=True
                                    )
             user.flag = Flags.Test_14
         elif text == "Ответ 1" or text == "Ответ 3":
@@ -2691,7 +2761,8 @@ async def main_hand(message: types.Message):
                                    reply_markup=functions.create_keyboard(
                                        name_buttons=["Следующий вопрос"]
                                    ),
-                                   parse_mode="Markdown"
+                                   parse_mode="Markdown",
+                                   disable_web_page_preview=True
                                    )
             user.flag = Flags.Test_14
 
@@ -2702,7 +2773,8 @@ async def main_hand(message: types.Message):
                                    reply_markup=functions.create_keyboard(
                                        name_buttons=["Ответ 1", "Ответ 2", "Ответ 3"]
                                    ),
-                                   parse_mode="Markdown"
+                                   parse_mode="Markdown",
+                                   disable_web_page_preview=True
                                    )
         elif text == "Ответ 3":
             await bot.send_message(chat_id=user_id,
@@ -2710,7 +2782,8 @@ async def main_hand(message: types.Message):
                                    reply_markup=functions.create_keyboard(
                                        name_buttons=["Завершить тест"]
                                    ),
-                                   parse_mode="Markdown"
+                                   parse_mode="Markdown",
+                                   disable_web_page_preview=True
                                    )
         elif text == "Ответ 1" or text == "Ответ 2":
             await bot.send_message(chat_id=user_id,
@@ -2718,7 +2791,8 @@ async def main_hand(message: types.Message):
                                    reply_markup=functions.create_keyboard(
                                        name_buttons=["Завершить тест"]
                                    ),
-                                   parse_mode="Markdown"
+                                   parse_mode="Markdown",
+                                   disable_web_page_preview=True
                                    )
 
 
@@ -2728,20 +2802,23 @@ async def main_hand(message: types.Message):
                                    reply_markup=functions.create_keyboard(
                                        name_buttons=["Я готов(а)"]
                                    ),
-                                   parse_mode="Markdown"
+                                   parse_mode="Markdown",
+                                   disable_web_page_preview=True
                                    )
 
         elif text == "Я готов(а)":
             await bot.send_message(chat_id=user_id,
                                    text=texts.text__0120,
-                                   parse_mode="Markdown"
+                                   parse_mode="Markdown",
+                                   disable_web_page_preview=True
                                    )
             await bot.send_message(chat_id=user_id,
                                    text=texts.text__0121,
                                    reply_markup=functions.create_keyboard(
                                        name_buttons=["Где же их искать?"]
                                    ),
-                                   parse_mode="Markdown"
+                                   parse_mode="Markdown",
+                                   disable_web_page_preview=True
                                    )
 
             user.flag = Flags.NONE
@@ -2752,7 +2829,8 @@ async def main_hand(message: types.Message):
                                reply_markup=functions.create_keyboard(
                                    name_buttons=["Покажи примеры!"]
                                ),
-                               parse_mode="Markdown"
+                               parse_mode="Markdown",
+                               disable_web_page_preview=True
                                )
 
     elif text == "Покажи примеры!":
@@ -2761,32 +2839,39 @@ async def main_hand(message: types.Message):
                                reply_markup=functions.create_keyboard(
                                    name_buttons=["а платные?"]
                                ),
-                               parse_mode="Markdown"
+                               parse_mode="Markdown",
+                               disable_web_page_preview=True
                                )
 
     elif text == "а платные?":
         await bot.send_message(chat_id=user_id,
                                text=texts.text__0124,
-                               parse_mode="Markdown"
+                               parse_mode="Markdown",
+                               disable_web_page_preview=True
+
                                )
         await bot.send_message(chat_id=user_id,
                                text=texts.text__0125,
                                reply_markup=functions.create_keyboard(
                                    name_buttons=["Как правильно подобрать фото?"]
                                ),
-                               parse_mode="Markdown"
+                               parse_mode="Markdown",
+                               disable_web_page_preview=True
+
                                )
 
     elif text == "Как правильно подобрать фото?":
         await bot.send_message(chat_id=user_id,
                                text=texts.text__0126,
                                reply_markup=functions.create_keyboard(
-                                   name_buttons=["Покaжи пример!"]
+                                   name_buttons=["Покaжи пpимeр!"]
                                ),
-                               parse_mode="Markdown"
+                               parse_mode="Markdown",
+                               disable_web_page_preview=True
+
                                )
 
-    elif text == "Покaжи пример!":
+    elif text == "Покaжи пpимeр!":
         await bot.send_photo(chat_id=user_id,
                              photo=texts.link_photo_068,
                              reply_markup=functions.create_keyboard(
@@ -2801,7 +2886,8 @@ async def main_hand(message: types.Message):
                                reply_markup=functions.create_keyboard(
                                    name_buttons=["Отлично! Спасибо!"]
                                ),
-                               parse_mode="Markdown"
+                               parse_mode="Markdown",
+                               disable_web_page_preview=True
                                )
 
     elif text == "Отлично! Спасибо!":
@@ -2810,7 +2896,8 @@ async def main_hand(message: types.Message):
                                reply_markup=functions.create_keyboard(
                                    name_buttons=["Начать тест"]
                                ),
-                               parse_mode="Markdown"
+                               parse_mode="Markdown",
+                               disable_web_page_preview=True
                                )
         user.flag = Flags.Test_15
 
@@ -2818,7 +2905,8 @@ async def main_hand(message: types.Message):
         if text == "Начать тест":
             await bot.send_message(chat_id=user_id,
                                    text=texts.text__0129,
-                                   parse_mode="Markdown"
+                                   parse_mode="Markdown",
+                                   disable_web_page_preview=True
                                    )
             await bot.send_photo(chat_id=user_id,
                                  photo=texts.link_photo_069,
@@ -2828,7 +2916,8 @@ async def main_hand(message: types.Message):
                                    reply_markup=functions.create_keyboard(
                                        name_buttons=["Ответ 1", "Ответ 2"]
                                    ),
-                                   parse_mode="Markdown"
+                                   parse_mode="Markdown",
+                                   disable_web_page_preview=True
                                    )
         elif text == "Ответ 2":
             await bot.send_message(chat_id=user_id,
@@ -2836,7 +2925,8 @@ async def main_hand(message: types.Message):
                                    reply_markup=functions.create_keyboard(
                                        name_buttons=["Следующий вопрос"]
                                    ),
-                                   parse_mode="Markdown"
+                                   parse_mode="Markdown",
+                                   disable_web_page_preview=True
                                    )
             user.flag = Flags.Test_16
         elif text == "Ответ 1":
@@ -2845,7 +2935,8 @@ async def main_hand(message: types.Message):
                                    reply_markup=functions.create_keyboard(
                                        name_buttons=["Следующий вопрос"]
                                    ),
-                                   parse_mode="Markdown"
+                                   parse_mode="Markdown",
+                                   disable_web_page_preview=True
                                    )
             user.flag = Flags.Test_16
 
@@ -2859,7 +2950,8 @@ async def main_hand(message: types.Message):
                                    reply_markup=functions.create_keyboard(
                                        name_buttons=["Ответ 1", "Ответ 2"]
                                    ),
-                                   parse_mode="Markdown"
+                                   parse_mode="Markdown",
+                                   disable_web_page_preview=True
                                    )
         elif text == "Ответ 1":
             await bot.send_message(chat_id=user_id,
@@ -2867,7 +2959,8 @@ async def main_hand(message: types.Message):
                                    reply_markup=functions.create_keyboard(
                                        name_buttons=["Завершить тест"]
                                    ),
-                                   parse_mode="Markdown"
+                                   parse_mode="Markdown",
+                                   disable_web_page_preview=True
                                    )
         elif text == "Ответ 2":
             await bot.send_message(chat_id=user_id,
@@ -2875,7 +2968,8 @@ async def main_hand(message: types.Message):
                                    reply_markup=functions.create_keyboard(
                                        name_buttons=["Завершить тест"]
                                    ),
-                                   parse_mode="Markdown"
+                                   parse_mode="Markdown",
+                                   disable_web_page_preview=True
                                    )
 
 
@@ -2885,18 +2979,20 @@ async def main_hand(message: types.Message):
                                    reply_markup=functions.create_keyboard(
                                        name_buttons=["Я готов(а)"]
                                    ),
-                                   parse_mode="Markdown"
+                                   parse_mode="Markdown",
+                                   disable_web_page_preview=True
                                    )
 
         elif text == "Я готов(а)":
             await bot.send_message(chat_id=user_id,
-                                   text=texts.text__0120,
-                                   parse_mode="Markdown"
+                                   text=texts.text__71,
+                                   parse_mode="Markdown",
+                                   disable_web_page_preview=True
                                    )
             await bot.send_message(chat_id=user_id,
-                                   text=texts.text__0121,
+                                   text=texts.text__72,
                                    reply_markup=functions.create_keyboard(
-                                       name_buttons=["Где же их искать?"]
+                                       name_buttons=["Зaписывaю!"]
                                    ),
                                    parse_mode="Markdown",
                                    disable_web_page_preview=True
@@ -3014,7 +3110,6 @@ async def main_hand(message: types.Message):
                                reply_markup=functions.create_keyboard(
                                    name_buttons=["Пoнятнo!"]
                                ),
-                               parse_mode="Markdown",
                                disable_web_page_preview=True
                                )
 
@@ -3144,9 +3239,20 @@ async def main_hand(message: types.Message):
                                parse_mode="Markdown",
                                disable_web_page_preview=True,
                                )
-
+    else:
+        await message.reply("Загружаю твой вопрос... Подожди минутку")
+        response = await OpenAI.question(text=introductory_part + text)
+        if not user.payment:
+            response += text_for_pay
+        await bot.send_message(chat_id=user_id,
+                               text=response,
+                               parse_mode="Markdown",
+                               disable_web_page_preview=True,
+                               )
     users.update_info(user)
 
 
 if __name__ == "__main__":
+    reminders = Reminders()
+    reminders.start_process(func=reminders.start_schedule)
     executor.start_polling(dp, skip_updates=False)
