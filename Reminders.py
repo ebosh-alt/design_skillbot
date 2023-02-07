@@ -25,7 +25,7 @@ class Reminders:
     async def work():
         list_user_id = users.get_keys()
         now_time = datetime.now()
-
+        
         for user_id in list_user_id:
             try:
                 user = users.get(user_id)
@@ -36,13 +36,13 @@ class Reminders:
                                                text=texts.text_for_reminder_1,
                                                parse_mode="Markdwon")
                         user.count_reminder += 1
-
+    
                     elif (now_time - time_transition_payment) > time_reminder_2 and user.count_reminder == 1:
                         await bot.send_message(chat_id=user_id,
                                                text=texts.text_for_reminder_2,
                                                parse_mode="Markdown")
                         user.count_reminder += 1
-
+    
                     users.update_info(user)
             except:
                 pass

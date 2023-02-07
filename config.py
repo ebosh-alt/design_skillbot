@@ -8,8 +8,6 @@ from Users import Users
 
 api_key = "5993284335:AAHuoszGTlENSxll7RzDEfvkRracX_rRBIc"
 openai_api_key = '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'
-a=""
-
 
 bot = Bot(token=api_key)
 dp = Dispatcher(bot)
