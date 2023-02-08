@@ -1,0 +1,25 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+ <head>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+  <title>
+   Прием платежа с помощью виджета ЮKassa
+  </title>
+  <script src="https://yookassa.ru/checkout-widget/v1/checkout-widget.js">
+  </script>
+ </head>
+ <body>
+  <div id="payment-form">
+  </div>
+  <script>
+   const checkout = new window.YooMoneyCheckoutWidget({
+          confirmation_token: 'ct-2b75ad2a-000f-5000-9000-1479d427797f',          return_url: 'https://example.com/',
+          error_callback: function(error) {
+              console.log(error)
+          }
+      });
+
+      checkout.render('payment-form');
+  </script>
+ </body>
+</html>

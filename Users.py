@@ -4,13 +4,14 @@ from Enum_classes import Flags, Steps
 
 class User:
     def __init__(self, key: int = None, flag: Flags = Flags.NONE, payment: bool = False, username: str = None,
-                 time_transition_payment: int = None, count_reminder: int = 0) -> None:
+                 time_transition_payment: int = None, count_reminder: int = 0, key_payment: str = None) -> None:
         self.key: int = key
         self.flag: Flags = flag
         self.payment: bool = payment
         self.username: str = username
         self.time_transition_payment: int = time_transition_payment
         self.count_reminder: int = count_reminder
+        self.key_payment = key_payment
 
     def get_tuple(self) -> tuple:
         return (self.key,
@@ -19,6 +20,7 @@ class User:
                 self.username,
                 self.time_transition_payment,
                 self.count_reminder,
+                self.key_payment,
                 )
 
 
@@ -39,6 +41,7 @@ class Users(Sqlite3_Database):
                 username=obj_tuple[3],
                 time_transition_payment=obj_tuple[4],
                 count_reminder=obj_tuple[5],
+                key_payment=obj_tuple[6],
             )
             return obj
         return False

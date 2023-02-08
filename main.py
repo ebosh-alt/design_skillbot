@@ -1,7 +1,10 @@
+from flask import Flask, request
 from aiogram import types
 import time
+from multiprocessing import Process
 
 from Enum_classes import Flags
+from Payments import Checking
 from Reminders import Reminders
 from Users import User
 from config import *
@@ -20,8 +23,8 @@ async def start(message: types.Message):
         users.add(user)
         user = users.get(user_id)
         user.username = message.from_user.first_name
-    user.payment = False
-    # print(texts.start_text.format(username=user.username))
+
+    user.flag = Flags.NONE
     await bot.send_message(chat_id=user_id,
                            text=texts.start_text.format(username=user.username),
                            reply_markup=functions.create_keyboard(name_buttons=keyboards.name_buttons_by_start,
@@ -35,11 +38,13 @@ async def start(message: types.Message):
 async def start(message: types.Message):
     user_id = message.from_user.id
     user = users.get(user_id)
+
     if not user:
         user = User(key=user_id)
         users.add(user)
         user = users.get(user_id)
         user.username = message.from_user.first_name
+    user.flag = Flags.NONE
     users.update_info(user)
 
 
@@ -109,7 +114,10 @@ async def main_hand(message: types.Message):
     elif text == "Хочу начать":
         await bot.send_message(chat_id=user_id,
                                text=texts.text_for_payment,
-                               reply_markup=types.ReplyKeyboardRemove(),
+                               reply_markup=functions.inl_create_keyboard(
+                                   buttons=[["Оплатить 2990 руб.",
+                                             WEBHOOK_HOST + f"/pay?user_id={user_id}&price=2990.00"]]
+                               ),
                                parse_mode="Markdown",
                                disable_web_page_preview=True,
                                )
@@ -3249,7 +3257,33 @@ async def main_hand(message: types.Message):
     users.update_info(user)
 
 
+
+app = Flask(__name__)
+
+
+@app.route("/pay", methods=["POST", "GET"])
+def payments():
+    user_id = str(request.args.get('user_id'))
+    price = str(request.args.get('price'))
+    key = functions.create_pay(user_id, price=price)
+    user = users.get(int(user_id))
+    user.key_payment = key.replace("ct-", "")
+    users.update_info(user)
+    return functions.render_html(functions.create_pay(user_id, price=price))
+
+
+def bot_start_polling():
+    executor.start_polling(dispatcher=dp, skip_updates=True)
+
+
 if __name__ == "__main__":
     reminders = Reminders()
     reminders.start_process(func=reminders.start_schedule)
-    executor.start_polling(dp, skip_updates=False)
+
+    bot_process = Process(target=bot_start_polling)
+    bot_process.start()
+
+    checking = Checking()
+    checking.start_process(func=checking.start_schedule)
+
+    app.run(host=WEBAPP_HOST, port=WEBAPP_PORT)
