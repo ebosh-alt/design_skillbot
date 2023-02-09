@@ -25,5 +25,10 @@ class Flags(Enum):
     Composition_3 = 25
     Composition_4 = 26
 
-class Steps(Enum):
+
+class Reminder(Enum):
     NONE = 0
+    first_reminder = 1
+    second_reminder = 2
+    third_reminder = 3
+    fourth_reminder = 4

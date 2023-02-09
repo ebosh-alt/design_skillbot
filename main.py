@@ -1,9 +1,9 @@
-from flask import Flask, request
+import datetime
+
 from aiogram import types
 import time
-from multiprocessing import Process
 
-from Enum_classes import Flags
+from Enum_classes import Flags, Reminder
 from Payments import Checking
 from Reminders import Reminders
 from Users import User
@@ -112,17 +112,36 @@ async def main_hand(message: types.Message):
                                )
 
     elif text == "Хочу начать":
+        data = functions.create_pay(user_id=str(user_id),
+                                    price="2990.00")
+        key = data[1]
+        link = data[0]
+        user.key_payment = key
         await bot.send_message(chat_id=user_id,
                                text=texts.text_for_payment,
                                reply_markup=functions.inl_create_keyboard(
-                                   buttons=[["Оплатить 2990 руб.",
-                                             WEBHOOK_HOST + f"/pay?user_id={user_id}&price=2990.00"]]
+                                   buttons=[["Оплатить 2990 руб.", link
+                                             ]]
                                ),
                                parse_mode="Markdown",
                                disable_web_page_preview=True,
                                )
+        now_time = message.date
+
+        now_time_tuple = now_time.timetuple()
         user.flag = Flags.Payment
-        user.time_transition_payment = time.mktime(message.date.timetuple())
+        user.time_transition_payment = time.mktime(now_time_tuple)
+        user.reminder = Reminder.first_reminder
+        # if now_time_tuple.tm_hour >= 19 and now_time_tuple.tm_min >= 15:
+        #     time_rem = datetime.datetime(year=now_time_tuple.tm_year, month=now_time_tuple.tm_mon,
+        #                                  day=now_time_tuple.tm_mday, hour=19, minute=25, second=0)
+        #     time_rem += datetime.timedelta(days=1)
+        #     user.time_reminder = time.mktime(time_rem.timetuple())
+        # else:
+        time_rem = datetime.datetime(year=now_time_tuple.tm_year, month=now_time_tuple.tm_mon,
+                                     day=now_time_tuple.tm_mday, hour=16, minute=35, second=0)
+
+        user.time_reminder = time.mktime(time_rem.timetuple())
 
     elif text == "Начать историю":
         await bot.send_message(chat_id=user_id,
@@ -3257,33 +3276,11 @@ async def main_hand(message: types.Message):
     users.update_info(user)
 
 
-
-app = Flask(__name__)
-
-
-@app.route("/pay", methods=["POST", "GET"])
-def payments():
-    user_id = str(request.args.get('user_id'))
-    price = str(request.args.get('price'))
-    key = functions.create_pay(user_id, price=price)
-    user = users.get(int(user_id))
-    user.key_payment = key.replace("ct-", "")
-    users.update_info(user)
-    return functions.render_html(functions.create_pay(user_id, price=price))
-
-
-def bot_start_polling():
-    executor.start_polling(dispatcher=dp, skip_updates=True)
-
-
 if __name__ == "__main__":
     reminders = Reminders()
     reminders.start_process(func=reminders.start_schedule)
 
-    bot_process = Process(target=bot_start_polling)
-    bot_process.start()
-
     checking = Checking()
     checking.start_process(func=checking.start_schedule)
 
-    app.run(host=WEBAPP_HOST, port=WEBAPP_PORT)
+    executor.start_polling(dispatcher=dp, skip_updates=True)

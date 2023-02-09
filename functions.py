@@ -1,44 +1,26 @@
 from aiogram import types
-from bs4 import BeautifulSoup
 from yookassa import Payment, Configuration
 
-Configuration.account_id = '873492'
-Configuration.secret_key = 'test_rFwIwdtgIwpyQgI555vYUd7u_Nd8p3u2A2h5o5diF0Q'
+Configuration.account_id = '980889'
+Configuration.secret_key = 'live_JB-sjh_-FPp_2Rl5QeX5Rlm6lwqarahXnk4YAbZCOnQ'
 
 
-def create_pay(user_id: str, price: str) -> str:
+def create_pay(user_id: str, price: str) -> tuple:
     payment = Payment.create({
         "amount": {
             "value": price,
             "currency": "RUB"
         },
         "confirmation": {
-            "type": "embedded"
+            "type": "redirect",
+            "return_url": "https://t.me/design_ai_skillbot"
+
         },
         "capture": True,
         "description": user_id
     })
-    return payment.confirmation.confirmation_token
 
-
-
-
-
-def render_html(pay_token: str) -> str:
-    with open("./templates/index.html", "r", encoding='utf-8') as inf:
-        txt = inf.read()
-    soup = BeautifulSoup(txt, 'html.parser')
-    with open("./templates/index.js", "r", encoding='utf-8') as inf:
-        txt = inf.read()
-    new_soup = BeautifulSoup(txt, 'html.parser').prettify().split(" ")
-    new_soup[15] = f"'{pay_token}',"
-    txt = "<script>"
-    for i in new_soup:
-        txt += i + ' '
-    txt += "\n  </script>"
-    new_soup = BeautifulSoup(txt, 'html.parser')
-    soup.body.append(new_soup)
-    return soup.prettify()
+    return payment.confirmation.confirmation_url, payment.id
 
 
 def create_keyboard(name_buttons: list, ) -> types.ReplyKeyboardMarkup:
@@ -73,4 +55,4 @@ def inl_create_keyboard(buttons: list[list], ):
 
 
 if __name__ == "__main__":
-    render_html(create_pay("55"))
+    create_pay("55", "29990.00")

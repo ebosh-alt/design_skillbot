@@ -2,13 +2,12 @@ import time
 from asyncio import run
 from multiprocessing import Process
 
-import schedule as schedule
 from yookassa import Payment
 
 import functions
 import texts
 from Enum_classes import Flags
-from config import users, bot, WEBHOOK_HOST
+from config import users, bot
 
 
 class Checking:
@@ -28,7 +27,9 @@ class Checking:
     def check_pay(self, key: str):
         try:
             res = Payment.find_one(key)
-            return True
+            if res.paid and res.status == "succeeded":
+
+                return True
         except:
             return False
 
@@ -58,14 +59,13 @@ class Checking:
 
     def start_schedule(self):
         while True:
-            schedule.run_pending()
             run(self.work())
-            time.sleep(1)
+            time.sleep(30)
 
 
 
 
 if __name__ == "__main__":
     checking = Checking()
-    checking.check_pay("2b75bee3-000f-5000-8000-136a5ca22d9b")
-    checking.start_process(func=checking.start_schedule)
+    checking.check_pay("2b75d1d5-000f-5000-9000-15168f1fb17c")
+    # checking.start_process(func=checking.start_schedule)
