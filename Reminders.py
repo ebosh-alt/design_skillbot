@@ -28,7 +28,7 @@ class Reminders:
     @staticmethod
     async def work():
         list_user_id = users.get_keys()
-        now_time = datetime.datetime.now()
+        now_time = datetime.datetime.now().utcnow()
 
         for user_id in list_user_id:
             user = users.get(user_id)
@@ -53,7 +53,6 @@ class Reminders:
             if user.time_reminder is not None and not user.payment:
                 time_reminder = datetime.datetime.utcfromtimestamp(user.time_reminder).timetuple()
                 now_time_tuple = now_time.timetuple()
-                print(time_reminder, "\n", now_time_tuple)
                 if time_reminder.tm_mday == now_time_tuple.tm_mday and time_reminder.tm_hour == now_time_tuple.tm_hour \
                         and time_reminder.tm_min == now_time_tuple.tm_min:
                     if user.reminder == Reminder.first_reminder:
@@ -69,7 +68,7 @@ class Reminders:
                                                              link]]))
 
                         time_rem = datetime.datetime(year=now_time_tuple.tm_year, month=now_time_tuple.tm_mon,
-                                                     day=now_time_tuple.tm_mday, hour=11, minute=0, second=0)
+                                                     day=now_time_tuple.tm_mday, hour=14, minute=0, second=0)
                         time_rem += datetime.timedelta(days=1)
                         time_rem_tuple = time_rem.timetuple()
                         user.time_reminder = time.mktime(time_rem_tuple)
@@ -89,7 +88,7 @@ class Reminders:
                                                                                            ["Оплатить 9990 руб.",
                                                                                             link]]))
                         time_rem = datetime.datetime(year=now_time_tuple.tm_year, month=now_time_tuple.tm_mon,
-                                                     day=now_time_tuple.tm_mday, hour=12, minute=15, second=0)
+                                                     day=now_time_tuple.tm_mday, hour=15, minute=15, second=0)
                         time_rem += datetime.timedelta(days=2)
                         time_rem_tuple = time_rem.timetuple()
                         user.time_reminder = time.mktime(time_rem_tuple)
@@ -107,7 +106,7 @@ class Reminders:
                                                                                           [["Оплатить 990 руб.",
                                                                                             link]]))
                         time_rem_tuple = datetime.datetime(year=now_time_tuple.tm_year, month=now_time_tuple.tm_mon,
-                                                           day=now_time_tuple.tm_mday, hour=17, minute=30,
+                                                           day=now_time_tuple.tm_mday, hour=20, minute=30,
                                                            second=0).timetuple()
 
                         user.time_reminder = time.mktime(time_rem_tuple)
