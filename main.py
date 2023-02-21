@@ -113,32 +113,32 @@ async def main_hand(message: types.Message):
 
     elif text == "Хочу начать":
         data = functions.create_pay(user_id=str(user_id),
-                                    price="2990.00")
+                                    price=2990)
         key = data[1]
         link = data[0]
         user.key_payment = key
         await bot.send_message(chat_id=user_id,
                                text=texts.text_for_payment,
                                reply_markup=functions.inl_create_keyboard(
-                                   buttons=[["Оплатить 2990 руб.", link
+                                   buttons=[["Оплатить 2990 руб.", f"{link}"
                                              ]]
                                ),
                                parse_mode="Markdown",
                                disable_web_page_preview=True,
                                )
-        now_time = message.date
+        now_time = message.date.utcnow()
         now_time_tuple = now_time.timetuple()
         user.flag = Flags.Payment
         user.time_transition_payment = time.mktime(now_time_tuple)
         user.reminder = Reminder.first_reminder
-        if now_time_tuple.tm_hour >= 20 and now_time_tuple.tm_min >= 15:
+        if now_time_tuple.tm_hour >= 16 and now_time_tuple.tm_min >= 15:
             time_rem = datetime.datetime(year=now_time_tuple.tm_year, month=now_time_tuple.tm_mon,
-                                         day=now_time_tuple.tm_mday, hour=19, minute=48, second=0)
+                                         day=now_time_tuple.tm_mday, hour=16, minute=15, second=0)
             time_rem += datetime.timedelta(days=1)
             user.time_reminder = time.mktime(time_rem.timetuple())
         else:
             time_rem = datetime.datetime(year=now_time_tuple.tm_year, month=now_time_tuple.tm_mon,
-                                         day=now_time_tuple.tm_mday, hour=19, minute=54, second=0)
+                                         day=now_time_tuple.tm_mday, hour=16, minute=15, second=0)
 
             user.time_reminder = time.mktime(time_rem.timetuple())
 

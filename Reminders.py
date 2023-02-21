@@ -3,8 +3,6 @@ from asyncio import run
 import datetime
 from multiprocessing import Process
 
-import schedule
-
 import functions
 import texts
 from Enum_classes import Reminder
@@ -36,7 +34,7 @@ class Reminders:
                 time_transition_payment = datetime.datetime.utcfromtimestamp(user.time_transition_payment)
                 if (now_time - time_transition_payment) > time_reminder_1 and user.count_reminder == 0:
                     data = functions.create_pay(user_id=str(user_id),
-                                                price="2990.00")
+                                                price=2990)
                     key = data[1]
                     link = data[0]
                     user.key_payment = key
@@ -57,7 +55,7 @@ class Reminders:
                         and time_reminder.tm_min == now_time_tuple.tm_min:
                     if user.reminder == Reminder.first_reminder:
                         data = functions.create_pay(user_id=str(user_id),
-                                                    price="2990.00")
+                                                    price=2990)
                         key = data[1]
                         link = data[0]
                         user.key_payment = key
@@ -76,17 +74,17 @@ class Reminders:
 
                     elif user.reminder == Reminder.second_reminder:
                         data = functions.create_pay(user_id=str(user_id),
-                                                    price="9990.00")
+                                                    price=9990)
                         key = data[1]
                         link = data[0]
                         user.key_payment = key
                         await bot.send_message(chat_id=user_id,
                                                text=texts.text_for_reminder_4.format(username=user.username),
                                                reply_markup=functions.inl_create_keyboard(buttons=
-                                                                                          [["Написать нам",
-                                                                                            link_to_bot],
-                                                                                           ["Оплатить 9990 руб.",
-                                                                                            link]]))
+                                                                                          [["Написать нам",link_to_bot],
+                                                                                           ["Оплатить 9990 руб.", link]]
+                                                                                          )
+                                               )
                         time_rem = datetime.datetime(year=now_time_tuple.tm_year, month=now_time_tuple.tm_mon,
                                                      day=now_time_tuple.tm_mday, hour=15, minute=15, second=0)
                         time_rem += datetime.timedelta(days=2)
@@ -96,7 +94,7 @@ class Reminders:
 
                     elif user.reminder == Reminder.third_reminder:
                         data = functions.create_pay(user_id=str(user_id),
-                                                    price="990.00")
+                                                    price=990)
                         key = data[1]
                         link = data[0]
                         user.key_payment = key
@@ -114,7 +112,7 @@ class Reminders:
 
                     elif user.reminder == Reminder.fourth_reminder:
                         data = functions.create_pay(user_id=str(user_id),
-                                                    price="990.00")
+                                                    price=990)
                         key = data[1]
                         link = data[0]
                         user.key_payment = key

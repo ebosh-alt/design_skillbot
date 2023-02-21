@@ -37,7 +37,7 @@ not_successful_payment = "Извините, но ваш код не подход
 
 text_after_pay = "Спасибо за оплату! \n\nНу что, начнем?"
 
-text_for_reminder = "Вы можете подробнее прочитать про наш курс на нашем сайте. Если у вас останутся вопросы, " \
+text_for_reminder = "Вы можете подробнее прочитать про наш курс на [нашем сайте](https://www.skillbots.ru/design?utm_source=error_code_tg&utm_medium=tgbot). Если у вас останутся вопросы, " \
                     "то напишите на [@skillbots_support]" \
                          "(https://t.me/skillbots_support)\n\nТакже напоминаю, " \
                     "что сегодня у вас есть возможность получить курс всего за 2990 руб."

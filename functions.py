@@ -5,7 +5,7 @@ Configuration.account_id = '980889'
 Configuration.secret_key = 'live_JB-sjh_-FPp_2Rl5QeX5Rlm6lwqarahXnk4YAbZCOnQ'
 
 
-def create_pay(user_id: str, price: str) -> tuple:
+def create_pay(user_id: str, price: int) -> tuple:
     payment = Payment.create({
         "amount": {
             "value": price,
@@ -17,9 +17,13 @@ def create_pay(user_id: str, price: str) -> tuple:
 
         },
         "capture": True,
-        "description": user_id
+        "description": user_id,
+        "receipt": {"customer": {"email": "evsevm@gmail.com"}}
     })
-
+    # print(payment.amount.__dict__)
+    # print(payment.recipient.__dict__)
+    # print(payment.confirmation.__dict__)
+    # print(payment.confirmation.confirmation_url, payment.id)
     return payment.confirmation.confirmation_url, payment.id
 
 
@@ -34,7 +38,7 @@ def create_keyboard(name_buttons: list, ) -> types.ReplyKeyboardMarkup:
     return keyboard
 
 
-def inl_create_keyboard(buttons: list[list], ):
+def inl_create_keyboard(buttons: list, ):
     keyboard = types.InlineKeyboardMarkup(row_width=len(buttons), resize_keyboard=True)
     array = []
     for button in buttons:
@@ -55,4 +59,4 @@ def inl_create_keyboard(buttons: list[list], ):
 
 
 if __name__ == "__main__":
-    create_pay("55", "29990.00")
+    print(create_pay("55", 2))

@@ -4,6 +4,7 @@ import openai
 class OpenAi:
     def __init__(self, openai_api_key):
         self.openai = openai
+        self.openai.log = "info"
         self.openai.api_key = openai_api_key
 
     async def question(self, text: str) -> str:
